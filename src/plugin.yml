@@ -1,0 +1,24 @@
+name: VanillaEnhancements
+version: 1.0
+api-version: 1.13
+author: tmanti
+main: me.tmanti.vanillaenhancements.Main
+commands:
+  runestone:
+    description: test command to create a runestone
+    usage: /runestone [name]
+  home:
+    description: teleport to location inscribed in runestone
+    usage: /home
+  recipe:
+    description: op command to create a recipe
+    usage: /recipe
+  adv:
+    description: test command to open advanced crafting
+    usage: /adv
+  sendtitle:
+    description: send title to all/specific players
+    usage: /sendtitle
+  dab:
+    description: sends DAB to all ppl cause dab
+    usage: /dab

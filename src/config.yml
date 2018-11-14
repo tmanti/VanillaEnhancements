@@ -1,0 +1,53 @@
+Recipes:
+  Runestone:
+    '0':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: GRASS_BLOCK
+    '1':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: NETHERRACK
+    '2':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: END_STONE
+    '3':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: OBSIDIAN
+    '4':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: ENDER_EYE
+    '5':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: OBSIDIAN
+    '6':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: QUARTZ
+    '7':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: DIAMOND_BLOCK
+    '8':
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: CHORUS_FRUIT
+    output:
+      ==: org.bukkit.inventory.ItemStack
+      v: 1519
+      type: REDSTONE_BLOCK
+      meta:
+        ==: ItemMeta
+        meta-type: UNSPECIFIC
+        display-name: §cEmpty Runestone
+        lore:
+        - ''
+        - §9An unenchanted Runestone
+        - ''
+        - §1Right Click to Inscribe your location
+        - ''
+        - §l§o§4Warning this action is irreversible
