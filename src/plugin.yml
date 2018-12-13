@@ -1,5 +1,5 @@
 name: VanillaEnhancements
-version: 1.0
+version: 1.1B
 api-version: 1.13
 author: tmanti
 main: me.tmanti.vanillaenhancements.Main
@@ -22,3 +22,6 @@ commands:
   dab:
     description: sends DAB to all ppl cause dab
     usage: /dab
+  horse:
+    description: command for the horsePickup UI
+    usage: /horse

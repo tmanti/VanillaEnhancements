@@ -2,6 +2,7 @@ package me.tmanti.vanillaenhancements;
 
 import me.tmanti.vanillaenhancements.AdvancedCrafting.CustomItems;
 import me.tmanti.vanillaenhancements.AdvancedCrafting.AdvancedCraftCore;
+import me.tmanti.vanillaenhancements.HorsesPlus.HorsePickup;
 import me.tmanti.vanillaenhancements.commands.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,10 +23,12 @@ public class Main extends JavaPlugin {
         this.getCommand("adv").setExecutor(new AdvancedCraftCore(this));
         this.getCommand("sendtitle").setExecutor(new commandSendTitle());
         this.getCommand("dab").setExecutor(new commandDab());
+        this.getCommand("horse").setExecutor(new HorsePickup());
 
         getServer().getPluginManager().registerEvents(new AdvancedCraftCore(this), this);
         getServer().getPluginManager().registerEvents(new CustomItems(), this);
         getServer().getPluginManager().registerEvents(new commandRecipe(), this);
+        getServer().getPluginManager().registerEvents(new HorsePickup(), this);
 
         loadConfig();
     }
