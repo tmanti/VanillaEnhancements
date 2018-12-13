@@ -2,7 +2,7 @@ package me.tmanti.vanillaenhancements;
 
 import me.tmanti.vanillaenhancements.AdvancedCrafting.CustomItems;
 import me.tmanti.vanillaenhancements.AdvancedCrafting.AdvancedCraftCore;
-import me.tmanti.vanillaenhancements.HorsesPlus.HorsePickup;
+import me.tmanti.vanillaenhancements.commands.HorsePickup;
 import me.tmanti.vanillaenhancements.commands.*;
 import org.bukkit.plugin.java.JavaPlugin;
 

@@ -11,12 +11,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +29,7 @@ public class CustomItems implements Listener {
     private boolean rsCreation = false;
 
     @EventHandler
-    public void useRunestone(PlayerInteractEvent event){
+    private void useRunestone(PlayerInteractEvent event){
         Action action = event.getAction();
         ItemStack item = event.getItem();
         Player player = event.getPlayer();
@@ -46,7 +46,7 @@ public class CustomItems implements Listener {
     }
 
     @EventHandler
-    public void playerNameRunestone(AsyncPlayerChatEvent event){
+    private void playerNameRunestone(AsyncPlayerChatEvent event){
         String msg = event.getMessage();
         Player player = event.getPlayer();
         if(rsCreation){
@@ -60,6 +60,39 @@ public class CustomItems implements Listener {
                 player.sendMessage("Runestone Inscribed");
                 rsCreation = false;
             }
+        }
+    }
+
+    protected void spawnHorse(ItemStack saddle, Player player){
+
+    }
+
+    @EventHandler
+    private void playerInteractEntity(PlayerInteractEntityEvent event){
+        Entity entity = event.getRightClicked();
+        Player player = event.getPlayer();
+
+        ItemStack item = player.getInventory().getItemInMainHand();
+        ItemMeta itemmeta = item.getItemMeta();
+
+        if(entity.getType() == EntityType.HORSE && player.isSneaking()) {
+            event.setCancelled(true);
+            player.getInventory().addItem(horseSummon((Horse) entity));
+            entity.remove();
+        } else if(itemmeta.getDisplayName() == ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon") && item.getType() == Material.SADDLE ) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    private void playerInteract(PlayerInteractEvent event){
+        Player player = event.getPlayer();
+        Action action = event.getAction();
+
+        ItemStack item = event.getItem();
+        ItemMeta itemmeta = item.getItemMeta();
+        if(itemmeta.getDisplayName() == ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon") && item.getType() == Material.SADDLE && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
+
         }
     }
 
@@ -115,6 +148,34 @@ public class CustomItems implements Listener {
         RuneStone.setItemMeta(itemmeta);
 
         return RuneStone;
+    }
+
+    public static ItemStack horseSummon(Horse horse){
+        ItemStack saddle = new ItemStack(Material.SADDLE);
+        net.minecraft.server.v1_13_R2.ItemStack nmsSaddle = CraftItemStack.asNMSCopy(saddle);
+        NBTTagCompound saddleCompound = (nmsSaddle.hasTag()) ? nmsSaddle.getTag() : new NBTTagCompound();
+
+        saddleCompound.set("horseData", new NBTTagString(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horse.getInventory().toString()));
+
+        NBTTagList ench = new NBTTagList();
+        saddleCompound.set("ench", ench);
+
+        nmsSaddle.setTag(saddleCompound);
+        ItemStack horseSummon =  CraftItemStack.asBukkitCopy(nmsSaddle);
+
+        ItemMeta itemmeta = horseSummon.getItemMeta();
+        itemmeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon"));
+
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add(ChatColor.BLUE + "It summons a horse");
+
+        itemmeta.setLore(lore);
+
+        System.out.println(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horse.getInventory().toString());
+
+        saddle.setItemMeta(itemmeta);
+
+        return saddle;
     }
 
 }
