@@ -7,6 +7,7 @@ import net.minecraft.server.v1_13_R2.NBTTagList;
 import net.minecraft.server.v1_13_R2.NBTTagString;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -63,10 +64,6 @@ public class CustomItems implements Listener {
         }
     }
 
-    protected void spawnHorse(ItemStack saddle, Player player){
-
-    }
-
     @EventHandler
     private void playerInteractEntity(PlayerInteractEntityEvent event){
         Entity entity = event.getRightClicked();
@@ -92,7 +89,7 @@ public class CustomItems implements Listener {
         ItemStack item = event.getItem();
         ItemMeta itemmeta = item.getItemMeta();
         if(itemmeta.getDisplayName() == ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon") && item.getType() == Material.SADDLE && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
-
+            spawnHorse(item, player);
         }
     }
 
@@ -171,11 +168,26 @@ public class CustomItems implements Listener {
 
         itemmeta.setLore(lore);
 
-        System.out.println(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horse.getInventory().toString());
+        System.out.println(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horse.getInventory().getContents().toString());
 
         saddle.setItemMeta(itemmeta);
 
         return saddle;
+    }
+
+    protected void spawnHorse(ItemStack saddle, Player player){
+        net.minecraft.server.v1_13_R2.ItemStack nmsSaddle = CraftItemStack.asNMSCopy(saddle);
+        NBTTagCompound saddleCompound = (nmsSaddle.hasTag()) ? nmsSaddle.getTag() : new NBTTagCompound();
+        if(saddleCompound.hasKey("horseData")){
+            String data = saddleCompound.getString("horseData");
+            String[] parts = data.split("/");
+            Horse horse = (Horse) player.getWorld().spawn(player.getLocation(), Horse.class);
+            horse.setTamed(true);
+            horse.setOwner(player);
+            horse.setColor(Horse.Color.valueOf(parts[0]));
+            horse.setStyle(Horse.Style.valueOf(parts[1]));
+            horse.getInventory().setContents();
+        }
     }
 
 }
