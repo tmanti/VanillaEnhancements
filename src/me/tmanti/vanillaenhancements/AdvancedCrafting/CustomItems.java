@@ -1,5 +1,8 @@
 package me.tmanti.vanillaenhancements.AdvancedCrafting;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.mojang.brigadier.Message;
 import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import net.minecraft.server.v1_13_R2.NBTTagInt;
@@ -16,14 +19,24 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ListIterator;
 
 public class CustomItems implements Listener {
 
@@ -72,11 +85,11 @@ public class CustomItems implements Listener {
         ItemStack item = player.getInventory().getItemInMainHand();
         ItemMeta itemmeta = item.getItemMeta();
 
-        if(entity.getType() == EntityType.HORSE && player.isSneaking()) {
+        if(entity.getType().equals(EntityType.HORSE) && player.isSneaking()) {
             event.setCancelled(true);
             player.getInventory().addItem(horseSummon((Horse) entity));
             entity.remove();
-        } else if(itemmeta.getDisplayName() == ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon") && item.getType() == Material.SADDLE ) {
+        } else if(itemmeta.getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon")) && item.getType().equals(Material.SADDLE)) {
             event.setCancelled(true);
         }
     }
@@ -87,10 +100,18 @@ public class CustomItems implements Listener {
         Action action = event.getAction();
 
         ItemStack item = event.getItem();
-        ItemMeta itemmeta = item.getItemMeta();
-        if(itemmeta.getDisplayName() == ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon") && item.getType() == Material.SADDLE && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)){
-            spawnHorse(item, player);
-        }
+
+        try {
+            if (item.getType().equals(Material.SADDLE) && item.hasItemMeta()) {
+                ItemMeta itemmeta = item.getItemMeta();
+
+                player.sendMessage(itemmeta.toString());
+
+                if (itemmeta.getDisplayName().equals(ChatColor.translateAlternateColorCodes('&', "&1&lMount Summon")) && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) {
+                    spawnHorse(item, player);
+                }
+            }
+        } catch (Exception e){}
     }
 
     public void giveItem(Player player, ItemStack item){
@@ -168,7 +189,14 @@ public class CustomItems implements Listener {
 
         itemmeta.setLore(lore);
 
-        System.out.println(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horse.getInventory().getContents().toString());
+        ItemStack[] horseInv = horse.getInventory().getContents();
+        JSONArray inv = new JSONArray();
+
+        for(int x = 0; x < horseInv.length; x++){
+            inv.add(horseInv[x]);
+        }
+
+        System.out.println(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + inv.toJSONString());
 
         saddle.setItemMeta(itemmeta);
 
@@ -186,7 +214,19 @@ public class CustomItems implements Listener {
             horse.setOwner(player);
             horse.setColor(Horse.Color.valueOf(parts[0]));
             horse.setStyle(Horse.Style.valueOf(parts[1]));
-            horse.getInventory().setContents();
+
+            JsonParser jsonParser = new JsonParser();
+
+            JsonElement jsonTree = jsonParser.parse(parts[2]);
+
+            JsonArray jsonInv =  jsonTree.getAsJsonArray();
+
+            ItemStack[] inv = horse.getInventory().getContents();
+
+            for(int x = 0; x < jsonInv.size(); x++){
+                inv.
+            }
+
         }
     }
 
