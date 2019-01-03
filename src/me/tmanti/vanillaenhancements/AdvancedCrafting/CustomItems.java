@@ -173,7 +173,20 @@ public class CustomItems implements Listener {
         net.minecraft.server.v1_13_R2.ItemStack nmsSaddle = CraftItemStack.asNMSCopy(saddle);
         NBTTagCompound saddleCompound = (nmsSaddle.hasTag()) ? nmsSaddle.getTag() : new NBTTagCompound();
 
-        saddleCompound.set("horseData", new NBTTagString(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horse.getInventory().toString()));
+        ItemStack[] inv = horse.getInventory().getContents();
+
+        ArrayList<ItemStack> items = new ArrayList<>();
+        for(ItemStack item: inv){
+            items.add(item);
+        }
+        Object[] itemsArr = items.toArray();
+        JSONArray horseInv = new JSONArray();
+
+        for(Object x : itemsArr){
+            horseInv.add(x);
+        }
+
+        saddleCompound.set("horseData", new NBTTagString(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horseInv.toJSONString()));
 
         NBTTagList ench = new NBTTagList();
         saddleCompound.set("ench", ench);
@@ -189,14 +202,7 @@ public class CustomItems implements Listener {
 
         itemmeta.setLore(lore);
 
-        ItemStack[] horseInv = horse.getInventory().getContents();
-        JSONArray inv = new JSONArray();
-
-        for(int x = 0; x < horseInv.length; x++){
-            inv.add(horseInv[x]);
-        }
-
-        System.out.println(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + inv.toJSONString());
+        System.out.println(horse.getColor().toString() + "/" + horse.getStyle().toString() + "/" + horseInv.toJSONString());
 
         saddle.setItemMeta(itemmeta);
 
@@ -215,17 +221,7 @@ public class CustomItems implements Listener {
             horse.setColor(Horse.Color.valueOf(parts[0]));
             horse.setStyle(Horse.Style.valueOf(parts[1]));
 
-            JsonParser jsonParser = new JsonParser();
 
-            JsonElement jsonTree = jsonParser.parse(parts[2]);
-
-            JsonArray jsonInv =  jsonTree.getAsJsonArray();
-
-            ItemStack[] inv = horse.getInventory().getContents();
-
-            for(int x = 0; x < jsonInv.size(); x++){
-                inv.
-            }
 
         }
     }
