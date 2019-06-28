@@ -1,42 +1,25 @@
 package me.tmanti.vanillaenhancements.AdvancedCrafting;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.mojang.brigadier.Message;
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
-import net.minecraft.server.v1_13_R2.NBTTagInt;
-import net.minecraft.server.v1_13_R2.NBTTagList;
-import net.minecraft.server.v1_13_R2.NBTTagString;
-import net.minecraft.server.v1_13_R2.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
+import net.minecraft.server.v1_14_R1.NBTTagList;
+import net.minecraft.server.v1_14_R1.NBTTagString;
 import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
 
 public class CustomItems implements Listener {
 
@@ -111,7 +94,9 @@ public class CustomItems implements Listener {
                     spawnHorse(item, player);
                 }
             }
-        } catch (Exception e){}
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void giveItem(Player player, ItemStack item){
@@ -142,7 +127,7 @@ public class CustomItems implements Listener {
         String playerLocation = location.getBlockX() + "/" + location.getBlockY() + "/" + location.getBlockZ() + "/" + location.getWorld() + "/" + Math.round(location.getYaw()/4);
 
         ItemStack rs = new ItemStack(Material.REDSTONE_BLOCK);
-        net.minecraft.server.v1_13_R2.ItemStack nmsRuneStone = CraftItemStack.asNMSCopy(rs);
+        net.minecraft.server.v1_14_R1.ItemStack nmsRuneStone = CraftItemStack.asNMSCopy(rs);
         NBTTagCompound rscompound = (nmsRuneStone.hasTag()) ? nmsRuneStone.getTag() : new NBTTagCompound();
         rscompound.set("location", new NBTTagString(playerLocation));
 
@@ -170,7 +155,7 @@ public class CustomItems implements Listener {
 
     public static ItemStack horseSummon(Horse horse){
         ItemStack saddle = new ItemStack(Material.SADDLE);
-        net.minecraft.server.v1_13_R2.ItemStack nmsSaddle = CraftItemStack.asNMSCopy(saddle);
+        net.minecraft.server.v1_14_R1.ItemStack nmsSaddle = CraftItemStack.asNMSCopy(saddle);
         NBTTagCompound saddleCompound = (nmsSaddle.hasTag()) ? nmsSaddle.getTag() : new NBTTagCompound();
 
         ItemStack[] inv = horse.getInventory().getContents();
@@ -210,7 +195,7 @@ public class CustomItems implements Listener {
     }
 
     protected void spawnHorse(ItemStack saddle, Player player){
-        net.minecraft.server.v1_13_R2.ItemStack nmsSaddle = CraftItemStack.asNMSCopy(saddle);
+        net.minecraft.server.v1_14_R1.ItemStack nmsSaddle = CraftItemStack.asNMSCopy(saddle);
         NBTTagCompound saddleCompound = (nmsSaddle.hasTag()) ? nmsSaddle.getTag() : new NBTTagCompound();
         if(saddleCompound.hasKey("horseData")){
             String data = saddleCompound.getString("horseData");
